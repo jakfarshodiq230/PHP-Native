@@ -15,7 +15,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nili_soal = array_slice($nili_soal, 0, 10);
     }
     
-    
+    if (!empty($nili_soal) && $nilai_total_soal > 0) {
+        $result = [];
+        $current = [];
+        $n = count($nili_soal);
+
+        // Fungsi rekursif untuk mencari kombinasi
+        function backtrack($start, $remaining, &$result, &$current, $nili_soal, $n) {
+            if ($remaining == 0) {
+                $result[] = $current;
+                return;
+            }
+
+            for ($i = $start; $i < $n; $i++) {
+                if ($nili_soal[$i] > $remaining) {
+                    continue;
+                }
+
+                $current[] = $i;
+                backtrack($i + 1, $remaining - $nili_soal[$i], $result, $current, $nili_soal, $n);
+                array_pop($current);
+            }
+        }
+
+        backtrack(0, $nilai_total_soal, $result, $current, $nili_soal, $n);
+        $combinations = $result;
+    }
 }
 ?>
 
@@ -84,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <input type="submit" value="Hitung">
     </form>
-
+<?php if (isset($combinations)): ?>
         <h2>SOAL</h2>
         <pre>Array
 (
@@ -94,6 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endforeach; ?>
 ) 
 Dengan Nilai Total Soal (T) = <?php echo $nilai_total_soal; ?> ?</pre>
+<!-- menampilkan jawaban -->
+<h2>JAWABAN</h2>
+        <p>Jumlah semua Kombinasi (K) = <?php echo count($combinations); ?></p>
+        
 
+    <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
+        <p class="error">Input tidak valid. Pastikan Anda memasukkan angka-angka positif yang dipisahkan dengan koma.</p>
+    <?php endif; ?>
 </body>
 </html>
