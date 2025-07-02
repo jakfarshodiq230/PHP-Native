@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $n = count($nilai_soal);
 
         // Fungsi rekursif untuk mencari kombinasi
-        function backtrack($start, $remaining, &$result, &$current, $nilai_soal, $n) {
+        function combination($start, $remaining, &$result, &$current, $nilai_soal, $n) {
             if ($remaining == 0) {
                 $result[] = $current;
                 return;
@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 $current[] = $i;
-                backtrack($i + 1, $remaining - $nilai_soal[$i], $result, $current, $nilai_soal, $n);
+                combination($i + 1, $remaining - $nilai_soal[$i], $result, $current, $nilai_soal, $n);
                 array_pop($current);
             }
         }
 
-        backtrack(0, $nilai_total_soal, $result, $current, $nilai_soal, $n);
+        combination(0, $nilai_total_soal, $result, $current, $nilai_soal, $n);
         $combinations = $result;
     }
 }
