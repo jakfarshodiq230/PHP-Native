@@ -3,42 +3,42 @@
 // Memproses input dari form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $input = isset($_POST['nili_soal']) ? $_POST['nili_soal'] : '';
+    $input = isset($_POST['nilai_soal']) ? $_POST['nilai_soal'] : '';
     $nilai_total_soal = isset($_POST['nilai_total_soal']) ? (int)$_POST['nilai_total_soal'] : 0;
     
     // memisahkan input berdasarkan koma dan mengonversi ke array integer
-    $nili_soal = array_map('intval', array_filter(explode(',', $input), 'is_numeric'));
-    $nili_soal = array_filter($nili_soal, function($val) { return $val > 0; });
+    $nilai_soal = array_map('intval', array_filter(explode(',', $input), 'is_numeric'));
+    $nilai_soal = array_filter($nilai_soal, function($val) { return $val > 0; });
     
     // Batasi jumlah pertanyaan maksimal 10
-    if (count($nili_soal) > 10) {
-        $nili_soal = array_slice($nili_soal, 0, 10);
+    if (count($nilai_soal) > 10) {
+        $nilai_soal = array_slice($nilai_soal, 0, 10);
     }
     
-    if (!empty($nili_soal) && $nilai_total_soal > 0) {
+    if (!empty($nilai_soal) && $nilai_total_soal > 0) {
         $result = [];
         $current = [];
-        $n = count($nili_soal);
+        $n = count($nilai_soal);
 
         // Fungsi rekursif untuk mencari kombinasi
-        function backtrack($start, $remaining, &$result, &$current, $nili_soal, $n) {
+        function backtrack($start, $remaining, &$result, &$current, $nilai_soal, $n) {
             if ($remaining == 0) {
                 $result[] = $current;
                 return;
             }
 
             for ($i = $start; $i < $n; $i++) {
-                if ($nili_soal[$i] > $remaining) {
+                if ($nilai_soal[$i] > $remaining) {
                     continue;
                 }
 
                 $current[] = $i;
-                backtrack($i + 1, $remaining - $nili_soal[$i], $result, $current, $nili_soal, $n);
+                backtrack($i + 1, $remaining - $nilai_soal[$i], $result, $current, $nilai_soal, $n);
                 array_pop($current);
             }
         }
 
-        backtrack(0, $nilai_total_soal, $result, $current, $nili_soal, $n);
+        backtrack(0, $nilai_total_soal, $result, $current, $nilai_soal, $n);
         $combinations = $result;
     }
 }
@@ -101,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>SOAL TES MEMBUAT PROGRAM PHP</h1>
     
     <form method="post">
-        <label for="nili_soal">Soal (masukkan nilai tiap-tiap pertanyaan dalam soal yang dipisah dengan koma, maksimal 10 pertanyaan):</label><br>
-        <input type="text" id="nili_soal" name="nili_soal" placeholder="Contoh: 10,10,10,15,15" value="<?php echo isset($input) ? htmlspecialchars($input) : ''; ?>" required><br>
+        <label for="nilai_soal">Soal (masukkan nilai tiap-tiap pertanyaan dalam soal yang dipisah dengan koma, maksimal 10 pertanyaan):</label><br>
+        <input type="text" id="nilai_soal" name="nilai_soal" placeholder="Contoh: 10,10,10,15,15" value="<?php echo isset($input) ? htmlspecialchars($input) : ''; ?>" required><br>
         
         <label for="nilai_total_soal">T:</label><br>
         <input type="number" id="nilai_total_soal" name="nilai_total_soal" placeholder="Contoh: 30" value="<?php echo isset($nilai_total_soal) ? htmlspecialchars($nilai_total_soal) : ''; ?>" min="1" required>
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <pre>Array
 (
 <!-- menampilkan nilai soal -->
-<?php foreach ($nili_soal as $index => $row_nilai): ?>
+<?php foreach ($nilai_soal as $index => $row_nilai): ?>
     [Pertanyaan <?php echo $index + 1; ?>] => <?php echo $row_nilai; ?><br>
 <?php endforeach; ?>
 ) 
