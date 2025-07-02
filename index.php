@@ -118,14 +118,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     [Pertanyaan <?php echo $index + 1; ?>] => <?php echo $row_nilai; ?><br>
 <?php endforeach; ?>
 ) 
-Dengan Nilai Total Soal (T) = <?php echo $nilai_total_soal; ?> ?</pre>
+Dengan Nilai Total Soal (T) = <?php echo $nilai_total_soal; ?> </pre>
+
 <!-- menampilkan jawaban -->
 <h2>JAWABAN</h2>
         <p>Jumlah semua Kombinasi (K) = <?php echo count($combinations); ?></p>
-        
+
+
+<p>Daftar Kombinasi:</p>
+            <pre>Array
+(
+<?php foreach ($combinations as $i => $combination): ?>
+    [<?php echo $i; ?>] => Array
+    (
+<?php foreach ($combination as $index): ?>
+        [Pertanyaan <?php echo $index + 1; ?>] => <?php echo $nilai_soal[$index]; ?>
+
+<?php endforeach; ?>    )
+<?php endforeach; ?>
+)</pre>
+    
 
     <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
-        <p class="error">Input tidak valid. Pastikan Anda memasukkan angka-angka positif yang dipisahkan dengan koma.</p>
+        <p class="error">Input tidak valid. Pastikan Anda memasukkan angka-angka bilangan bulat yang dipisahkan dengan koma.</p>
     <?php endif; ?>
 </body>
 </html>
